@@ -6,7 +6,7 @@
 
 *Other productivity apps want you to do things. This one understands you.*
 
-**[Live Demo](https://YOUR-USERNAME.github.io/procrastinai/)** &nbsp;•&nbsp; **[Report a Bug](../../issues)** &nbsp;•&nbsp; **[Request a Feature (eventually)](../../issues)**
+**[Live Demo]([https://SaloniVaghela-05.github.io/procrastinai/](https://procrastinai.vercel.app/))** &nbsp;•&nbsp; **[Report a Bug](../../issues)** &nbsp;•&nbsp; **[Request a Feature (eventually)](../../issues)**
 
 ![HTML](https://img.shields.io/badge/HTML-CSS-JS-a855f7?style=for-the-badge)
 ![Dependencies](https://img.shields.io/badge/dependencies-0-a3e635?style=for-the-badge)
