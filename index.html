@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ProcrastinAI</title>
+<style>
+:root{--bg:#0d0b18;--card:#171428;--ink:#f0eefc;--mute:#9a94c0;--line:#2c2750;--p:#a855f7;--g:#a3e635;--h:#ff3d9a;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#f4f1ff;--card:#fff;--ink:#1c1638;--mute:#6b6590;--line:#d9d2f5;--p:#7e22ce;--g:#4d7c0f;--h:#be185d}}
+:root[data-theme="light"]{--bg:#f4f1ff;--card:#fff;--ink:#1c1638;--mute:#6b6590;--line:#d9d2f5;--p:#7e22ce;--g:#4d7c0f;--h:#be185d}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Trebuchet MS","Segoe UI",system-ui,sans-serif;line-height:1.5}
+.wrap{max-width:980px;margin:0 auto;padding:20px 16px 60px}
+h1{font-size:clamp(30px,6vw,46px);margin:0;letter-spacing:-1px}
+h1 span{color:var(--p)}
+.sub{color:var(--mute);margin:4px 0 20px}
+h2{font-size:18px;margin:0 0 12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px}
+.full{grid-column:1/-1}
+.bar{height:22px;background:var(--bg);border:1px solid var(--line);border-radius:99px;overflow:hidden}
+#fill{height:100%;width:10%;border-radius:99px;background:var(--g);transition:width .5s cubic-bezier(.3,1.6,.5,1),background .5s}
+.lvl{display:flex;justify-content:space-between;margin:8px 0 12px;font-size:14px;gap:8px}
+#lvlname{font-weight:700}
+#msg{color:var(--mute);min-height:24px}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+button{font:inherit;font-weight:700;border:0;border-radius:12px;padding:10px 14px;cursor:pointer;color:#fff;transition:transform .15s cubic-bezier(.3,1.8,.5,1)}
+button:hover{transform:translateY(-3px) rotate(-1deg)}
+button:active{transform:scale(.93)}
+.b1{background:#4d9a1a}.b2{background:var(--h)}.b3{background:var(--p)}
+input{font:inherit;width:100%;padding:11px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+:focus-visible{outline:3px solid var(--g);outline-offset:2px}
+.row{display:flex;gap:8px}
+.row input{flex:1;min-width:0}
+#excuse{margin-top:14px;padding:14px;border-radius:12px;border:1px dashed var(--p);min-height:88px;color:var(--ink)}
+#excuse.empty{color:var(--mute)}
+.caret::after{content:"▍";color:var(--p);animation:bl .7s steps(2) infinite}
+@keyframes bl{50%{opacity:0}}
+.mascot{display:flex;flex-direction:column;align-items:center}
+#blob{width:220px;max-width:100%;transition:transform .6s cubic-bezier(.3,1.6,.5,1)}
+.float{animation:fl 3s ease-in-out infinite}
+.shake{animation:sh .18s linear infinite}
+@keyframes fl{50%{transform:translateY(-8px)}}
+@keyframes sh{25%{transform:translateX(-2px)}75%{transform:translateX(2px)}}
+#zzz,#sweat{opacity:0;transition:opacity .3s}
+#zzz text{animation:fl 2s ease-in-out infinite}
+#mood{font-weight:700;margin-top:6px}
+#pet{color:var(--mute);font-size:14px}
+ul{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:10px}
+li{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+li .t{flex:1;min-width:140px;font-weight:700}
+li .tags{width:100%;display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:12px;background:var(--line);color:var(--ink);padding:3px 9px;border-radius:99px}
+li.out{animation:vortex .7s ease-in forwards}
+@keyframes vortex{to{transform:rotate(540deg) scale(0);opacity:0}}
+.empty-l{color:var(--mute);text-align:center;padding:14px}
+.small{padding:7px 10px;font-size:13px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Procrastin<span>AI</span></h1>
+  <p class="sub">The smart copilot that helps you do it later.</p>
+  <div class="grid">
+    <section class="card full" aria-labelledby="g">
+      <h2 id="g">Guilt Level</h2>
+      <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" id="pb"><div id="fill"></div></div>
+      <div class="lvl"><span id="lvlname">Level: Professional Menu-Browser</span><span id="pct">10%</span></div>
+      <div id="msg" aria-live="polite">Nothing is due yet. Probably.</div>
+      <div class="btns">
+        <button class="b1" data-a="grass">Touch Grass</button>
+        <button class="b2" data-a="ep">One More Episode</button>
+        <button class="b3" data-a="work">Actually Do Work</button>
+      </div>
+    </section>
+
+    <section class="card mascot" aria-labelledby="m">
+      <h2 id="m" style="align-self:flex-start">Slacker Blob</h2>
+      <svg id="blob" viewBox="0 0 240 220" role="img" aria-label="A blob mascot that reacts to your guilt level">
+        <g id="body" class="float" style="transform-origin:120px 200px">
+          <ellipse cx="120" cy="205" rx="80" ry="10" fill="#000" opacity=".25"/>
+          <path d="M40 180C30 110 60 40 120 40s90 70 80 140c-2 22-30 26-80 26s-78-4-80-26z" fill="#a855f7"/>
+          <path d="M62 80c10-20 30-28 46-30" stroke="#fff" stroke-width="7" stroke-linecap="round" fill="none" opacity=".35"/>
+          <g id="eyes"></g>
+          <path id="mouth" d="M100 145q20 8 40 0" stroke="#2b0b4d" stroke-width="5" stroke-linecap="round" fill="none"/>
+          <g id="sweat" fill="#7dd3fc"><path d="M178 70q10 16 0 24q-10-8 0-24z"/><path d="M60 62q8 12 0 19q-8-7 0-19z"/></g>
+        </g>
+        <g id="zzz" fill="#a3e635" font-weight="700" font-family="sans-serif"><text x="170" y="50" font-size="22">Z</text><text x="188" y="30" font-size="16">z</text></g>
+      </svg>
+      <div id="mood">Snoozing</div>
+      <div id="pet">Tasks delayed: 0. Blob is normal-sized.</div>
+    </section>
+
+    <section class="card" aria-labelledby="e">
+      <h2 id="e">AI Excuse Vault</h2>
+      <div class="row">
+        <input id="task" placeholder="What are you avoiding? e.g. Write research paper" maxlength="80">
+        <button class="b3" id="gen">Excuse me</button>
+      </div>
+      <div id="excuse" class="empty" aria-live="polite">Type a task and get a dignified reason to not do it.</div>
+    </section>
+
+    <section class="card full" aria-labelledby="v">
+      <h2 id="v">Someday/Maybe Vortex</h2>
+      <div class="row">
+        <input id="nt" placeholder="Add a task you'll get to eventually" maxlength="80">
+        <button class="b1" id="add">Add task</button>
+      </div>
+      <ul id="list"></ul>
+    </section>
+  </div>
+</div>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+var guilt=10,delayed=0;
+var levels=[[15,"Level: Professional Menu-Browser","Nothing is due yet. Probably."],[35,"Level: Tab Hoarder","You have 47 tabs open. 46 are research."],[55,"Level: Suspiciously Organized Desk","You cleaned the whole room instead. Impressive avoidance."],[75,"Level: Deadline Whisperer","The deadline is now audible."],[101,"Level: 3 AM Panic Architect","Your future self has filed a formal complaint."]];
+var lines={grass:["Touched grass. It was fine. Guilt drops.","Grass touched. Fresh air is a valid excuse for two hours."],ep:["Just one more episode. You said that three episodes ago.","Autoplay thanks you for your service."],work:["Wow. Who are you? Guilt plummets, suspicion rises.","You worked for four minutes. A new personal record."]};
+var delta={grass:-15,ep:12,work:-25};
+
+function setGuilt(n,text){
+  guilt=Math.max(0,Math.min(100,n));
+  var L=levels.filter(function(l){return guilt<l[0]})[0];
+  $('fill').style.width=guilt+'%';
+  $('fill').style.background=guilt<35?'var(--g)':guilt<70?'var(--p)':'var(--h)';
+  $('pb').setAttribute('aria-valuenow',guilt);
+  $('lvlname').textContent=L[1];$('pct').textContent=Math.round(guilt)+'%';
+  $('msg').textContent=text||L[2];
+  mascot();
+}
+function pick(a){return a[Math.floor(Math.random()*a.length)]}
+document.querySelectorAll('[data-a]').forEach(function(b){
+  b.onclick=function(){var a=b.dataset.a;setGuilt(guilt+delta[a],pick(lines[a]))}
+});
+setInterval(function(){if(guilt<100)setGuilt(guilt+1)},6000);
+
+var eyesEl=$('eyes');
+function mascot(){
+  var body=$('body'),m=$('mood'),mouth=$('mouth');
+  var sleepy=guilt<25,panic=guilt>=70;
+  eyesEl.innerHTML=sleepy
+    ?'<path d="M78 112q14 10 28 0M134 112q14 10 28 0" stroke="#2b0b4d" stroke-width="5" stroke-linecap="round" fill="none"/>'
+    :'<circle cx="92" cy="108" r="'+(panic?15:11)+'" fill="#fff"/><circle cx="148" cy="108" r="'+(panic?15:11)+'" fill="#fff"/><circle cx="'+(panic?92:94)+'" cy="110" r="'+(panic?4:6)+'" fill="#2b0b4d"/><circle cx="'+(panic?148:150)+'" cy="110" r="'+(panic?4:6)+'" fill="#2b0b4d"/>';
+  mouth.setAttribute('d',sleepy?'M104 148q16 6 32 0':panic?'M98 156q22-22 44 0':'M100 150h40');
+  $('zzz').style.opacity=sleepy?1:0;
+  $('sweat').style.opacity=panic?1:0;
+  body.setAttribute('class',panic?'shake':'float');
+  m.textContent=sleepy?'Snoozing':panic?'Sweating profusely':'Vaguely aware';
+  var s=1+Math.min(delayed,15)*0.03;
+  $('blob').style.transform='scale('+s+')';
+}
+
+var starts=["Statistically speaking,","After careful consideration of the literature,","Neuroscience tells us that","Per my extensive (imaginary) research,","As Aristotle almost certainly said,"];
+var mids=["cognitive output peaks after midnight, so starting now is sub-optimal","the alignment of Mercury and my inbox makes focus inadvisable","beginning before the ideal ambient temperature risks irreversible quality loss","I must first complete a full audit of my desk snacks","my brain is currently defragmenting and interruption would corrupt the process","the task requires a better pen, and the pen is philosophical"];
+var ends=["Starting \"%\" now would be reckless.","Therefore \"%\" must wait, for science.","Any attempt at \"%\" today would be an act of disrespect to the process.","Rushing \"%\" would be doing it a disservice."];
+var typing=null;
+$('gen').onclick=function(){
+  var t=$('task').value.trim()||'that thing';
+  var text=pick(starts)+' '+pick(mids)+'. '+pick(ends).replace('%',t);
+  var el=$('excuse');el.className='caret';el.textContent='';
+  clearInterval(typing);var i=0;
+  typing=setInterval(function(){
+    el.textContent=text.slice(0,++i);
+    if(i>=text.length){clearInterval(typing);el.className='';}
+  },22);
+  setGuilt(guilt+3,'An excuse was generated. Guilt has been slightly outsourced.');
+};
+$('task').onkeydown=function(e){if(e.key==='Enter')$('gen').click()};
+
+var tags=["Deferred to 3 AM panic session","Moved to 'after this one video'","Rescheduled to a Tuesday that never comes","Postponed until motivation returns","Sent to the void with love","Waiting for a sign from the universe"];
+var tasks=[{t:"Reply to that email from March",g:["Waiting for a sign from the universe"]},{t:"Start the project",g:[]}];
+function render(){
+  var ul=$('list');ul.innerHTML='';
+  if(!tasks.length){ul.innerHTML='<div class="empty-l">Nothing to avoid. Add a task to get started.</div>';return}
+  tasks.forEach(function(k,idx){
+    var li=document.createElement('li');
+    var t=document.createElement('span');t.className='t';t.textContent=k.t;
+    var b=document.createElement('button');b.className='b2 small';b.textContent='Procrastinate Further';
+    b.onclick=function(){
+      k.g.push(pick(tags));delayed++;render();
+      setGuilt(guilt+4,'"'+k.t+'" has been deferred again. You are consistent.');
+    };
+    var v=document.createElement('button');v.className='b3 small';v.textContent='Send to Tomorrow';
+    v.onclick=function(){
+      li.classList.add('out');
+      setTimeout(function(){tasks.splice(tasks.indexOf(k),1);delayed++;render();setGuilt(guilt+2,'Task swallowed by the Tomorrow black hole. It will return never.')},650);
+    };
+    li.appendChild(t);li.appendChild(b);li.appendChild(v);
+    if(k.g.length){var d=document.createElement('div');d.className='tags';k.g.forEach(function(x){var s=document.createElement('span');s.className='tag';s.textContent=x;d.appendChild(s)});li.appendChild(d)}
+    ul.appendChild(li);
+  });
+  $('pet').textContent='Tasks delayed: '+delayed+'. '+(delayed>8?'Blob is now enormous.':delayed>3?'Blob is getting comfortable.':'Blob is normal-sized.');
+}
+$('add').onclick=function(){var v=$('nt').value.trim();if(!v)return;tasks.push({t:v,g:[]});$('nt').value='';render()};
+$('nt').onkeydown=function(e){if(e.key==='Enter')$('add').click()};
+render();setGuilt(guilt);
+})();
+</script>
+</body>
+</html>
